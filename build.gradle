@@ -48,3 +48,7 @@ dependencies {
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test"
 }
+
+application {
+    applicationDefaultJvmArgs = ["-Dio.ktor.development=true"]
+}
