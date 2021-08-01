@@ -40,6 +40,11 @@ dependencies {
 
     implementation "ch.qos.logback:logback-classic:$logback_version"
 
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+
+    implementation("com.h2database:h2:1.4.199")
+
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test"
 }

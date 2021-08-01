@@ -11,8 +11,9 @@ import io.ktor.routing.*
 fun Route.userRouting() {
     route("/user") {
         get {
-            if (UserRepository.isNotEmpty()) {
-                call.respond(UserRepository.all())
+            val users = UserRepository.all()
+            if (users.isNotEmpty()) {
+                call.respond(users)
             } else {
                 call.respondText("No users found", status = HttpStatusCode.NotFound)
             }
@@ -33,9 +34,13 @@ fun Route.userRouting() {
             UserRepository.add(user)
             call.respondText("User stored correctly", status = HttpStatusCode.Created)
         }
-        patch {
+        patch("{id}") {
+            val id = call.parameters["id"]?.toLong() ?: return@patch call.respondText(
+                text = "Missing or malformed id",
+                status = HttpStatusCode.BadRequest
+            )
             val user = call.receive<UserModel>()
-            UserRepository.update(user)
+            UserRepository.update(id, user)
             call.respondText("User updated correctly", status = HttpStatusCode.OK)
         }
         delete("{id}") {
