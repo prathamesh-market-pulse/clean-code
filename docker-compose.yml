@@ -10,3 +10,22 @@ services:
       - 8080:8080
     expose:
       - 8080
+    networks:
+      - clean-code_network
+    depends_on:
+      - database
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=clean_code_db
+      - POSTGRES_USER=clean_code_user
+      - POSTGRES_PASSWORD=clean_code_pwd
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    networks:
+      - clean-code_network
+networks:
+  clean-code_network:
+    driver: bridge
