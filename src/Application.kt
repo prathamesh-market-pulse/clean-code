@@ -1,6 +1,5 @@
 package com.techvidhya
 
-import com.techvidhya.repository.createAndPrePopulateDb
 import com.techvidhya.repository.initDb
 import com.techvidhya.router.registerUserRoutes
 import io.ktor.application.*
@@ -13,7 +12,6 @@ fun Application.module(testing: Boolean = false) {
     install(ContentNegotiation) { json() }
 
     initDb()
-    createAndPrePopulateDb()
 
     registerUserRoutes()
 }

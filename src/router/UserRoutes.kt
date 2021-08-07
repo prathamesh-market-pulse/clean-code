@@ -1,5 +1,6 @@
 package com.techvidhya.router
 
+import com.techvidhya.extensions.*
 import com.techvidhya.model.UserModel
 import com.techvidhya.repository.UserRepository
 import io.ktor.application.*
@@ -15,41 +16,29 @@ fun Route.userRouting() {
             if (users.isNotEmpty()) {
                 call.respond(users)
             } else {
-                call.respondText("No users found", status = HttpStatusCode.NotFound)
+                call.respondUserNotFound()
             }
         }
         get("{id}") {
-            val id = call.parameters["id"]?.toLong() ?: return@get call.respondText(
-                text = "Missing or malformed id",
-                status = HttpStatusCode.BadRequest
-            )
-            val user = UserRepository.get(id) ?: return@get call.respondText(
-                text = "No user with id $id",
-                status = HttpStatusCode.NotFound
-            )
+            val id = call.parameters["id"]?.toLong() ?: return@get call.respondMalformedRequest()
+            val user = UserRepository.get(id) ?: return@get call.respondUserNotFound(id)
             call.respond(user)
         }
         post {
             val user = call.receive<UserModel>()
             UserRepository.add(user)
-            call.respondText("User stored correctly", status = HttpStatusCode.Created)
+            call.respondUserCreated()
         }
         patch("{id}") {
-            val id = call.parameters["id"]?.toLong() ?: return@patch call.respondText(
-                text = "Missing or malformed id",
-                status = HttpStatusCode.BadRequest
-            )
+            val id = call.parameters["id"]?.toLong() ?: return@patch call.respondMalformedRequest()
             val user = call.receive<UserModel>()
             UserRepository.update(id, user)
-            call.respondText("User updated correctly", status = HttpStatusCode.OK)
+            call.respondUserUpdated()
         }
         delete("{id}") {
-            val id = call.parameters["id"]?.toLong() ?: return@delete call.respondText(
-                text = "Missing or malformed id",
-                status = HttpStatusCode.BadRequest
-            )
+            val id = call.parameters["id"]?.toLong() ?: return@delete call.respondMalformedRequest()
             UserRepository.delete(id)
-            call.respondText("User deleted correctly", status = HttpStatusCode.OK)
+            call.respondUserDeleted()
         }
     }
 }

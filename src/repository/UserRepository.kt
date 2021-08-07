@@ -39,7 +39,6 @@ object UserRepository {
             .map { User.toUserModel(it) }
     }
 
-    @Throws(NullPointerException::class)
     fun delete(id: Long) = transaction {
         User.deleteWhere { User.id eq id }
     }
